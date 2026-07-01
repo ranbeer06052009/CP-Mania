@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/api/public-contests(.*)",
-      "destination": "https://cp-contest-tracker-510u.onrender.com/contests$1"
+      "destination": "https://cp-contest-tracker-510u.onrender.com/contests/$1"
     },
     {
       "source": "/api/(.*)",
