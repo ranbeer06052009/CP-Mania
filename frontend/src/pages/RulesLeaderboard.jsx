@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Award, Zap, Crosshair, Calendar, List, ChevronRight, Trophy } from 'lucide-react';
 
+const API_URL = import.meta.env.VITE_API_URL || '';
+
 const RulesLeaderboard = () => {
   const [loading, setLoading] = useState(true);
   const [setupComplete, setSetupComplete] = useState(null);
@@ -49,14 +51,14 @@ const RulesLeaderboard = () => {
 
   const checkStatus = async () => {
     try {
-      const res = await axios.get('/api/status');
+      const res = await axios.get(`${API_URL}/api/status`);
       setSetupComplete(res.data.setupComplete);
       if (res.data.setupComplete) {
         setRules(res.data.rules);
         fetchLeaderboard();
         
         // Fetch users for login dropdown and leaderboard display
-        const userRes = await axios.get('/api/users');
+        const userRes = await axios.get(`${API_URL}/api/users`);
         setAllUsers(userRes.data.map(u => u.name));
       } else {
         localStorage.removeItem('cpmania_token');
@@ -77,7 +79,7 @@ const RulesLeaderboard = () => {
 
   const fetchLeaderboard = async () => {
     try {
-      const res = await axios.get('/api/leaderboard');
+      const res = await axios.get(`${API_URL}/api/leaderboard`);
       setLeaderboard(res.data.leaderboard);
       setCurrentSessionStart(res.data.currentSessionStart);
     } catch (err) {
@@ -87,7 +89,7 @@ const RulesLeaderboard = () => {
 
   const fetchHistory = async () => {
     try {
-      const res = await axios.get('/api/points/history');
+      const res = await axios.get(`${API_URL}/api/points/history`);
       setPointsHistory(res.data);
       setShowHistoryModal(true);
     } catch (err) {
@@ -98,7 +100,7 @@ const RulesLeaderboard = () => {
   const handleSetup = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('/api/setup', setupData);
+      await axios.post(`${API_URL}/api/setup`, setupData);
       setSetupComplete(true);
       setRules(setupData.rules);
       fetchLeaderboard();
@@ -110,7 +112,7 @@ const RulesLeaderboard = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post('/api/login', loginForm);
+      const res = await axios.post(`${API_URL}/api/login`, loginForm);
       localStorage.setItem('cpmania_token', res.data.token);
       localStorage.setItem('cpmania_user', JSON.stringify(res.data.user));
       setIsLoggedIn(true);
@@ -144,7 +146,7 @@ const RulesLeaderboard = () => {
     delete details.date; // Keep details clean
     
     try {
-      await axios.post('/api/points', {
+      await axios.post(`${API_URL}/api/points`, {
         date: dailyForm.date,
         total_points,
         details

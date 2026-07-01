@@ -6,6 +6,8 @@ import {
 } from 'date-fns';
 import { Calendar, Clock, Plus, ChevronLeft, ChevronRight, LayoutList, CalendarDays, ExternalLink, Trophy } from 'lucide-react';
 
+const API_URL = import.meta.env.VITE_API_URL || '';
+
 const ContestTracker = () => {
   const [contests, setContests] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -47,7 +49,7 @@ const ContestTracker = () => {
       }));
 
       // Fetch Manual Contests from backend
-      const manualRes = await axios.get('/api/contests');
+      const manualRes = await axios.get(`${API_URL}/api/contests`);
       const manualContests = manualRes.data.map(c => ({
         ...c,
         id: `manual-${c.id}`,
@@ -69,7 +71,7 @@ const ContestTracker = () => {
   const handleAddManual = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('/api/contests', newContest);
+      await axios.post(`${API_URL}/api/contests`, newContest);
       setManualModalOpen(false);
       setNewContest({ name: '', platform: '', start_time: '', duration: '' });
       fetchContests();
