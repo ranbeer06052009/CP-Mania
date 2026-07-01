@@ -12,14 +12,37 @@ app.use(express.json());
 const JWT_SECRET = process.env.JWT_SECRET || 'super-secret-key-for-cp-mania';
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/battlemania';
 
+// --- Serverless-safe cached MongoDB connection ---
+let isConnected = false;
+
+const connectDB = async () => {
+  if (isConnected && mongoose.connection.readyState === 1) return;
+  try {
+    await mongoose.connect(MONGODB_URI, {
+      serverSelectionTimeoutMS: 10000,
+      socketTimeoutMS: 45000,
+    });
+    isConnected = true;
+    console.log('Connected to MongoDB.');
+  } catch (err) {
+    console.error('MongoDB connection error:', err.message);
+    throw err;
+  }
+};
+
+// Ensure DB is connected before every request
+app.use(async (req, res, next) => {
+  try {
+    await connectDB();
+    next();
+  } catch (err) {
+    res.status(500).json({ error: 'Database connection failed. Please try again.' });
+  }
+});
+
 app.get('/', (req, res) => {
   res.send('CP Mania Backend is Live and Connected to MongoDB!');
 });
-
-// --- Mongoose Setup & Schemas ---
-mongoose.connect(MONGODB_URI)
-  .then(() => console.log('Connected to MongoDB Battle Mania.'))
-  .catch(err => console.error('MongoDB connection error:', err));
 
 const UserSchema = new mongoose.Schema({
   name: { type: String, unique: true, required: true },
