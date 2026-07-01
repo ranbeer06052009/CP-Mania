@@ -1,6 +1,14 @@
 {
   "rewrites": [
     {
+      "source": "/api/public-contests(.*)",
+      "destination": "https://cp-contest-tracker-510u.onrender.com/contests$1"
+    },
+    {
+      "source": "/api/(.*)",
+      "destination": "https://cp-mania-xfc1.vercel.app/api/$1"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }
