@@ -47,7 +47,7 @@ const ContestTracker = () => {
       }));
 
       // Fetch Manual Contests from backend
-      const manualRes = await axios.get('http://localhost:3001/api/contests');
+      const manualRes = await axios.get('/api/contests');
       const manualContests = manualRes.data.map(c => ({
         ...c,
         id: `manual-${c.id}`,
@@ -69,7 +69,7 @@ const ContestTracker = () => {
   const handleAddManual = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:3001/api/contests', newContest);
+      await axios.post('/api/contests', newContest);
       setManualModalOpen(false);
       setNewContest({ name: '', platform: '', start_time: '', duration: '' });
       fetchContests();

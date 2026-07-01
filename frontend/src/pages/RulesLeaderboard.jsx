@@ -49,14 +49,14 @@ const RulesLeaderboard = () => {
 
   const checkStatus = async () => {
     try {
-      const res = await axios.get('http://localhost:3001/api/status');
+      const res = await axios.get('/api/status');
       setSetupComplete(res.data.setupComplete);
       if (res.data.setupComplete) {
         setRules(res.data.rules);
         fetchLeaderboard();
         
         // Fetch users for login dropdown and leaderboard display
-        const userRes = await axios.get('http://localhost:3001/api/users');
+        const userRes = await axios.get('/api/users');
         setAllUsers(userRes.data.map(u => u.name));
       } else {
         localStorage.removeItem('cpmania_token');
@@ -77,7 +77,7 @@ const RulesLeaderboard = () => {
 
   const fetchLeaderboard = async () => {
     try {
-      const res = await axios.get('http://localhost:3001/api/leaderboard');
+      const res = await axios.get('/api/leaderboard');
       setLeaderboard(res.data.leaderboard);
       setCurrentSessionStart(res.data.currentSessionStart);
     } catch (err) {
@@ -87,7 +87,7 @@ const RulesLeaderboard = () => {
 
   const fetchHistory = async () => {
     try {
-      const res = await axios.get('http://localhost:3001/api/points/history');
+      const res = await axios.get('/api/points/history');
       setPointsHistory(res.data);
       setShowHistoryModal(true);
     } catch (err) {
@@ -98,7 +98,7 @@ const RulesLeaderboard = () => {
   const handleSetup = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:3001/api/setup', setupData);
+      await axios.post('/api/setup', setupData);
       setSetupComplete(true);
       setRules(setupData.rules);
       fetchLeaderboard();
@@ -110,7 +110,7 @@ const RulesLeaderboard = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post('http://localhost:3001/api/login', loginForm);
+      const res = await axios.post('/api/login', loginForm);
       localStorage.setItem('cpmania_token', res.data.token);
       localStorage.setItem('cpmania_user', JSON.stringify(res.data.user));
       setIsLoggedIn(true);
@@ -144,7 +144,7 @@ const RulesLeaderboard = () => {
     delete details.date; // Keep details clean
     
     try {
-      await axios.post('http://localhost:3001/api/points', {
+      await axios.post('/api/points', {
         date: dailyForm.date,
         total_points,
         details
