@@ -227,12 +227,7 @@ app.post('/api/contests', authenticateToken, async (req, res) => {
   }
 });
 
-// For Vercel (Export app instead of listening if imported)
-if (process.env.NODE_ENV !== 'production') {
-  const PORT = process.env.PORT || 3001;
-  app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
-  });
-}
-
-module.exports = app;
+const PORT = process.env.PORT || 3001;
+app.listen(PORT, () => {
+  console.log(`Server running on http://localhost:${PORT}`);
+});
