@@ -12,6 +12,10 @@ app.use(express.json());
 const JWT_SECRET = process.env.JWT_SECRET || 'super-secret-key-for-cp-mania';
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/battlemania';
 
+app.get('/', (req, res) => {
+  res.send('CP Mania Backend is Live and Connected to MongoDB!');
+});
+
 // --- Mongoose Setup & Schemas ---
 mongoose.connect(MONGODB_URI)
   .then(() => console.log('Connected to MongoDB Battle Mania.'))
