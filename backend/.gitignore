@@ -1,0 +1,4 @@
+node_modules/
+.env
+battlemania.db
+cpmania.db
