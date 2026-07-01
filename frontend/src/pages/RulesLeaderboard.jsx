@@ -58,6 +58,9 @@ const RulesLeaderboard = () => {
         // Fetch users for login dropdown and leaderboard display
         const userRes = await axios.get('http://localhost:3001/api/users');
         setAllUsers(userRes.data.map(u => u.name));
+      } else {
+        localStorage.removeItem('cpmania_token');
+        localStorage.removeItem('cpmania_user');
       }
       
       const token = localStorage.getItem('cpmania_token');
